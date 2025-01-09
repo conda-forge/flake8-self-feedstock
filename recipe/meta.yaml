@@ -1,30 +1,32 @@
 {% set name = "flake8-self" %}
 {% set version = "0.2.2" %}
-{% set sha256 = "6c592fa16451da6de268ea17cb5878c764797f08c1d5a47a6f886cb0ffc2ccad" %}
+
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/Korijn/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 6c592fa16451da6de268ea17cb5878c764797f08c1d5a47a6f886cb0ffc2ccad
 
 build:
   noarch: python
-  number: 0
-  script: python -m pip install --no-deps --ignore-installed .
+  number: 1
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
-  build:
-    - python
+  host:
+    - python {{ python_min }}
+    - setuptools
     - pip
   run:
-    - python
+    - python >={{ python_min }}
     - flake8
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - flake8_self
 
